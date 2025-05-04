@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Performastar",
+  "version": "1.0",
+
+  "icons": {
+    "128": "performastar.svg"
+  },
+
+  "content_scripts": [
+    {
+      "matches": [
+        "https://solved.ac/",
+        "https://solved.ac/en",
+        "https://solved.ac/en/",
+        "https://solved.ac/ja",
+        "https://solved.ac/ja/"
+      ],
+      "js": ["content.js"]
+    }
+  ]
+}
