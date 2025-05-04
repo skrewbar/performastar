@@ -3,6 +3,9 @@
   "name": "Performastar",
   "version": "1.0",
 
+  "default_locale": "ko",
+  "description": "__MSG_extension_description__",
+
   "icons": {
     "128": "performastar.svg"
   },
