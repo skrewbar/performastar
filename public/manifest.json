@@ -1,13 +1,19 @@
 {
   "manifest_version": 3,
   "name": "Performastar",
-  "version": "1.0",
+  "version": "1.0.1",
 
   "default_locale": "ko",
   "description": "__MSG_extension_description__",
 
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "performastar@skrewbar.com"
+    }
+  },
+
   "icons": {
-    "128": "performastar.svg"
+    "128": "performastar.png"
   },
 
   "content_scripts": [
