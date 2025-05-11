@@ -79,20 +79,7 @@ function updatePerformance() {
   }
 }
 
-// 옵저버 설정
-const problemImageObserver = new MutationObserver((records) => {
-  for (const record of records) {
-    if (record.type === "attributes") {
-      const problem = record.target as HTMLImageElement;
-      const diffculty = Number(problem.src.split("/").pop()!.split(".")[0]);
-      const index = Array.from(problem.parentElement!.children).indexOf(
-        problem
-      );
-      problems[index].difficulty = diffculty;
-      updatePerformance();
-    }
-  }
-});
+// 받기 버튼 옵저버 설정
 const buttonObserver = new MutationObserver((records) => {
   for (const record of records) {
     if (solvedTexts.has(record.target.textContent!)) {
@@ -117,14 +104,10 @@ function initialize(table: HTMLTableElement) {
     .children[0] as HTMLDivElement;
   marathonInfo.insertBefore(performanceWrapper, marathonInfo.children[1]);
 
-  // Problem 추가, 이미지 감시하기
+  // Problem 추가
   for (const problemContainer of table.tBodies[0].children[0].children) {
     const problem = problemContainer.children[0].children[0].children[0];
     const difficultyImage = problem.children[0] as HTMLImageElement;
-    problemImageObserver.observe(difficultyImage, {
-      attributes: true,
-      attributeFilter: ["src"],
-    });
     const diffculty = Number(
       difficultyImage.src.split("/").pop()!.split(".")[0]
     );
