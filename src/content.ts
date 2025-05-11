@@ -83,11 +83,12 @@ function updatePerformance() {
 const buttonObserver = new MutationObserver((records) => {
   for (const record of records) {
     if (solvedTexts.has(record.target.textContent!)) {
-      const button = record.target as HTMLButtonElement;
+      const button = record.target.parentElement as HTMLButtonElement;
       const buttonContainer = button.parentElement!;
       const index = Array.from(buttonContainer.parentElement!.children).indexOf(
         buttonContainer
       );
+      console.log(`index: ${index}`);
       problems[index].solved = true;
       updatePerformance();
     }
@@ -119,14 +120,15 @@ function initialize(table: HTMLTableElement) {
   const buttonContainers = table.tBodies[0].children[2].children;
   for (let i = 0; i < buttonContainers.length; i++) {
     const button = buttonContainers[i].children[0] as HTMLButtonElement;
+    if (solvedTexts.has(button.innerText)) {
+      problems[i].solved = true;
+    }
+
     buttonObserver.observe(button, {
       characterData: true,
       childList: true,
       subtree: true,
     });
-    if (solvedTexts.has(button.innerText)) {
-      problems[i].solved = true;
-    }
   }
 
   updatePerformance();
