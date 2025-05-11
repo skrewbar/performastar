@@ -150,13 +150,14 @@ function initialize(table: HTMLTableElement) {
 }
 
 // 루트 감시하고 테이블 추가되면 초기화
-const rootObserver = new MutationObserver((records) => {
+const rootObserver = new MutationObserver((records, observer) => {
   for (const record of records) {
     for (const node of record.addedNodes) {
       if (node.nodeName === "DIV" && node instanceof HTMLDivElement) {
         const table = node.querySelector("table");
         if (table) {
           initialize(table);
+          observer.disconnect(); // 초기화 후 옵저버 중지
         }
       }
     }
