@@ -134,15 +134,17 @@ function initialize(table: HTMLTableElement) {
   updatePerformance();
 }
 
+// URL 정규식
+const urlRegex = /^https:\/\/solved\.ac(\/en|\/ja)?\/?$/
+
 // 루트 감시하고 테이블 추가되면 초기화
-const rootObserver = new MutationObserver((records, observer) => {
+const rootObserver = new MutationObserver((records) => {
   for (const record of records) {
     for (const node of record.addedNodes) {
       if (node.nodeName === "DIV" && node instanceof HTMLDivElement) {
         const table = node.querySelector("table");
-        if (table) {
+        if (table && urlRegex.test(window.location.href)) {
           initialize(table);
-          observer.disconnect(); // 초기화 후 옵저버 중지
         }
       }
     }
