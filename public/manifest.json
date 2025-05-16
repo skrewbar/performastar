@@ -18,13 +18,7 @@
 
   "content_scripts": [
     {
-      "matches": [
-        "https://solved.ac/",
-        "https://solved.ac/en",
-        "https://solved.ac/en/",
-        "https://solved.ac/ja",
-        "https://solved.ac/ja/"
-      ],
+      "matches": ["https://solved.ac/*"],
       "js": ["content.js"]
     }
   ]
