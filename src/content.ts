@@ -1,81 +1,81 @@
 // html 요소 만들고 스타일링
 function createValueWrapper() {
-  const container = document.createElement("div");
-  container.style.display = "flex";
-  container.style.flexDirection = "column";
-  container.style.alignItems = "baseline";
-  container.style.marginLeft = "1em";
+  const container = document.createElement("div")
+  container.style.display = "flex"
+  container.style.flexDirection = "column"
+  container.style.alignItems = "baseline"
+  container.style.marginLeft = "1em"
 
-  const label = document.createElement("small");
-  label.innerText = "Label";
+  const label = document.createElement("small")
+  label.innerText = "Label"
 
-  const value = document.createElement("span");
-  value.style.fontWeight = "bold";
-  value.innerText = "0.00";
+  const value = document.createElement("span")
+  value.style.fontWeight = "bold"
+  value.innerText = "0.00"
 
-  container.append(label, value);
+  container.append(label, value)
 
-  return container;
+  return container
 }
-const performanceWrapper = createValueWrapper();
-const performanceLabel = performanceWrapper.children[0] as HTMLElement;
-const lang = window.location.pathname.split("/");
+const performanceWrapper = createValueWrapper()
+const performanceLabel = performanceWrapper.children[0] as HTMLElement
+const lang = window.location.pathname.split("/")
 
 if (lang.includes("en")) {
-  performanceLabel.innerText = "Performance";
+  performanceLabel.innerText = "Performance"
 } else if (lang.includes("ja")) {
-  performanceLabel.innerText = "パフォーマンス";
+  performanceLabel.innerText = "パフォーマンス"
 } else {
-  performanceLabel.innerText = "퍼포먼스";
+  performanceLabel.innerText = "퍼포먼스"
 }
 
 interface Problem {
-  difficulty: number;
-  solved: boolean;
+  difficulty: number
+  solved: boolean
 }
 
-const problems: Problem[] = [];
-const solvedTexts = new Set(["받음", "Redeemed", "クリア"]);
+const problems: Problem[] = []
+const solvedTexts = new Set(["받음", "Redeemed", "クリア"])
 
 /**
  * 퍼포먼스 계산하고 띄우는 함수
  */
 function updatePerformance() {
-  const solvedProblems = problems.filter((problem) => problem.solved);
+  const solvedProblems = problems.filter((problem) => problem.solved)
   const performance =
     solvedProblems.length > 0
       ? Math.log(
           solvedProblems.reduce(
             (sum, problem) => sum + Math.pow(2.4, problem.difficulty),
-            0
-          )
+            0,
+          ),
         ) / Math.log(2.4)
-      : 0;
-  const performanceSpan = performanceWrapper.children[1] as HTMLSpanElement;
-  performanceSpan.innerText = `${performance.toFixed(2)}`;
+      : 0
+  const performanceSpan = performanceWrapper.children[1] as HTMLSpanElement
+  performanceSpan.innerText = `${performance.toFixed(2)}`
 
-  const roundedValue = Math.round(performance);
+  const roundedValue = Math.round(performance)
   if (roundedValue >= 26) {
     // ruby
-    performanceSpan.style.color = "#ff0062";
+    performanceSpan.style.color = "#ff0062"
   } else if (roundedValue >= 21) {
     // diamond
-    performanceSpan.style.color = "#00b4fc";
+    performanceSpan.style.color = "#00b4fc"
   } else if (roundedValue >= 16) {
     // platinum
-    performanceSpan.style.color = "#27e2a4";
+    performanceSpan.style.color = "#27e2a4"
   } else if (roundedValue >= 11) {
     // gold
-    performanceSpan.style.color = "#ec9a00";
+    performanceSpan.style.color = "#ec9a00"
   } else if (roundedValue >= 6) {
     // silver
-    performanceSpan.style.color = "#435f7a";
+    performanceSpan.style.color = "#435f7a"
   } else if (roundedValue >= 1) {
     // bronze
-    performanceSpan.style.color = "#ad5600";
+    performanceSpan.style.color = "#ad5600"
   } else {
     // unrated
-    performanceSpan.style.color = "#000000";
+    performanceSpan.style.color = "#000000"
   }
 }
 
@@ -83,17 +83,17 @@ function updatePerformance() {
 const buttonObserver = new MutationObserver((records) => {
   for (const record of records) {
     if (solvedTexts.has(record.target.textContent!)) {
-      const button = record.target.parentElement as HTMLButtonElement;
-      const buttonContainer = button.parentElement!;
+      const button = record.target.parentElement as HTMLButtonElement
+      const buttonContainer = button.parentElement!
       const index = Array.from(buttonContainer.parentElement!.children).indexOf(
-        buttonContainer
-      );
-      console.log(`index: ${index}`);
-      problems[index].solved = true;
-      updatePerformance();
+        buttonContainer,
+      )
+      console.log(`index: ${index}`)
+      problems[index].solved = true
+      updatePerformance()
     }
   }
-});
+})
 
 /**
  * 요소 추가하고 감시하는 함수
@@ -102,36 +102,36 @@ const buttonObserver = new MutationObserver((records) => {
 function initialize(table: HTMLTableElement) {
   // 요소 추가
   const marathonInfo = table.parentElement!.parentElement!
-    .children[0] as HTMLDivElement;
-  marathonInfo.insertBefore(performanceWrapper, marathonInfo.children[1]);
+    .children[0] as HTMLDivElement
+  marathonInfo.insertBefore(performanceWrapper, marathonInfo.children[1])
 
   // Problem 추가
   for (const problemContainer of table.tBodies[0].children[0].children) {
-    const problem = problemContainer.children[0].children[0].children[0];
-    const difficultyImage = problem.children[0] as HTMLImageElement;
+    const problem = problemContainer.children[0].children[0].children[0]
+    const difficultyImage = problem.children[0] as HTMLImageElement
     const diffculty = Number(
-      difficultyImage.src.split("/").pop()!.split(".")[0]
-    );
+      difficultyImage.src.split("/").pop()!.split(".")[0],
+    )
 
-    problems.push({ difficulty: diffculty, solved: false });
+    problems.push({ difficulty: diffculty, solved: false })
   }
 
   // 버튼 감시하기
-  const buttonContainers = table.tBodies[0].children[2].children;
+  const buttonContainers = table.tBodies[0].children[2].children
   for (let i = 0; i < buttonContainers.length; i++) {
-    const button = buttonContainers[i].children[0] as HTMLButtonElement;
+    const button = buttonContainers[i].children[0] as HTMLButtonElement
     if (solvedTexts.has(button.innerText)) {
-      problems[i].solved = true;
+      problems[i].solved = true
     }
 
     buttonObserver.observe(button, {
       characterData: true,
       childList: true,
       subtree: true,
-    });
+    })
   }
 
-  updatePerformance();
+  updatePerformance()
 }
 
 // URL 정규식
@@ -142,17 +142,17 @@ const rootObserver = new MutationObserver((records) => {
   for (const record of records) {
     for (const node of record.addedNodes) {
       if (node.nodeName === "DIV" && node instanceof HTMLDivElement) {
-        const table = node.querySelector("table");
+        const table = node.querySelector("table")
         if (table && urlRegex.test(window.location.href)) {
-          initialize(table);
+          initialize(table)
         }
       }
     }
   }
-});
+})
 
-const root = document.querySelector("#__next")!;
+const root = document.querySelector("#__next")!
 rootObserver.observe(root, {
   childList: true,
   subtree: true,
-});
+})
